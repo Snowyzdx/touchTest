@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="js/jquery.js"></script>
+    <script src="touchjs/touch.min.js"></script>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .wheel{
+            width: 100%;
+            height: 200px;
+            margin: 0 auto;
+        }
+        .box{
+            height: 200px;
+            width: 300%;
+            margin: 0;
+        }
+        .box a{
+            display: block;
+            float: left;
+            width: 33.33%;
+            height: 100%;
+            text-align: center;
+            line-height: 200px;
+            font-size: 60px;
+            font-weight: bold;
+            color: #fff;
+            text-decoration:none;
+        }
+        .box a:nth-child(1){
+            background: red;
+        }
+        .box a:nth-child(2){
+            background: green;
+        }
+        .box a:nth-child(3){
+            background: yellow;
+        }
+    </style>
+    <script>
+        $(function() {
+            var windowW = $(window).width();
+            $(".wheel").mousedown(function(e){
+                e.preventDefault();
+            })
+
+            /*$(".box a").css({
+                width: windowW
+            });
+            $(".box").css({
+                width: windowW * 3,
+                overflow: "hidden"
+            })*/
+            var num;
+            var marginL;
+//        开始拖拽确定初始位置
+            touch.on("body", "dragstart", ".box", function () {
+                $(".box").css({
+                    translation: null
+                })
+                marginL = parseInt($(".box").css("marginLeft")) ? parseInt($(".box").css("marginLeft")) : 0;
+            })
+//        拖拽
+            touch.on("body", "drag", ".box", function (e) {
+                $(".box").css({
+                    marginLeft: marginL+e.x
+                })
+            })
+
+//      拖拽结束
+           touch.on("body","dragend",".box",function(e){
+                    if(Math.abs(e.distance<100)){
+                        $(".box").css({
+                            marginLeft:num*windowW
+                        })
+                    }else {//移动距离大于100时
+                        if (e.direction == "left") {
+                            num++;
+                            if (num == 3) {
+                                num = 2;
+                            } else {
+                                marginL = -(num * windowW);
+                            }
+                        } else {
+                            num--;
+                            if(num==-1){
+                                num=0;
+                            }else{
+                                marginL=num*(num*windowW);
+                            }
+                        }
+                    }
+                $(".box").css({
+                    marginLeft:marginL
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+<div class="wheel">
+    <div class="box">
+        <a class="aa" href="javascript:;">a</a>
+        <a class="aa" href="javascript:;">b</a>
+        <a class="aa" href="javascript:;">c</a>
+    </div>
+</div>
+</body>
+</html>
