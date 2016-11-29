@@ -24,7 +24,7 @@
         .box a{
             display: block;
             float: left;
-            width: 33.33%;
+            width: 33.333%;
             height: 100%;
             text-align: center;
             line-height: 200px;
@@ -49,15 +49,7 @@
             $(".wheel").mousedown(function(e){
                 e.preventDefault();
             })
-
-            /*$(".box a").css({
-                width: windowW
-            });
-            $(".box").css({
-                width: windowW * 3,
-                overflow: "hidden"
-            })*/
-            var num;
+            var num=0;
             var marginL;
 //        开始拖拽确定初始位置
             touch.on("body", "dragstart", ".box", function () {
@@ -72,33 +64,33 @@
                     marginLeft: marginL+e.x
                 })
             })
-
 //      拖拽结束
            touch.on("body","dragend",".box",function(e){
                     if(Math.abs(e.distance<100)){
                         $(".box").css({
-                            marginLeft:num*windowW
+                            marginLeft:num*windowW,
+                            translation:"margin-left 1s ease"
                         })
                     }else {//移动距离大于100时
                         if (e.direction == "left") {
                             num++;
-                            if (num == 3) {
+                            if (num>2) {
                                 num = 2;
-                            } else {
-                                marginL = -(num * windowW);
                             }
-                        } else {
+                            marginL = -(num * windowW);
+                        } else {//向右移动
                             num--;
-                            if(num==-1){
-                                num=0;
-                            }else{
-                                marginL=num*(num*windowW);
+                            if(num<0) {
+                                num = 0;
                             }
+                            marginL=-(num*windowW);
+//                            console.log( marginL);
                         }
                     }
-                $(".box").css({
-                    marginLeft:marginL
-                })
+                    $(".box").css({
+                        marginLeft:marginL,
+                        translation:"margin-left 1s ease"
+                    })
             })
         })
     </script>
